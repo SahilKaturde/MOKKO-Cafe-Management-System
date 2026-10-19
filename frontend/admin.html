@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MOKKO Admin Dashboard — Full system control, staff management, menu configuration, and system diagnostics.">
+  <title>Admin Dashboard — MOKKO</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body data-role="admin">
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a href="#" class="brand">
+      <span class="brand-icon">M</span>
+      <span class="brand-text"><strong>MOKKO</strong><small>Admin Portal</small></span>
+    </a>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="staff-profile" id="staffProfile">
+    <div class="staff-avatar" id="sidebarAvatar" style="background: linear-gradient(135deg, #b91c1c, #7f1d1d);">A</div>
+    <div class="staff-info">
+      <span class="staff-name" id="sidebarName">Administrator</span>
+      <span class="staff-role-badge admin">Admin</span>
+    </div>
+  </div>
+
+  <p class="nav-label">SYSTEM CONTROL</p>
+  <nav class="navigation">
+    <button class="nav-item active" data-page="dashboard"><span class="nav-icon">▦</span><span class="nav-text">Dashboard</span></button>
+    <button class="nav-item" data-page="staff"><span class="nav-icon">👥</span><span class="nav-text">Manage Staff</span></button>
+    <button class="nav-item" data-page="menu"><span class="nav-icon">☕</span><span class="nav-text">Configure Menu</span></button>
+    <button class="nav-item" data-page="tables"><span class="nav-icon">▤</span><span class="nav-text">Manage Tables</span></button>
+    <button class="nav-item" data-page="reports"><span class="nav-icon">📊</span><span class="nav-text">View Reports</span></button>
+    <button class="nav-item" data-page="system"><span class="nav-icon">⚙</span><span class="nav-text">Manage System</span></button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="connection-status">
+      <span class="status-dot" id="connDot"></span>
+      <span class="status-text" id="connText">Connecting…</span>
+    </div>
+    <button class="logout-btn" id="logoutBtn">Sign out ↗</button>
+  </div>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <div class="breadcrumb"><span id="breadcrumbRole">Admin</span> <span class="sep">/</span> <span id="breadcrumbPage">Dashboard</span></div>
+    <div class="topbar-right">
+      <span class="date-chip" id="todayDate"></span>
+      <button class="icon-btn" id="refreshBtn" title="Refresh">↻</button>
+      <div class="topbar-avatar" id="topbarAvatar" style="background: linear-gradient(135deg, #b91c1c, #7f1d1d);">A</div>
+    </div>
+  </header>
+
+  <div class="notice hidden" id="notice" role="alert"></div>
+
+  <!-- 1. ADMIN DASHBOARD -->
+  <section class="page active" id="page-dashboard">
+    <div class="page-hero">
+      <div>
+        <div class="eyebrow">SYSTEM OVERVIEW</div>
+        <h1>Welcome, <span id="greetName">Administrator</span> <span class="sparkle">✳</span></h1>
+        <p class="hero-sub">Complete system control, staff oversight, and cafe infrastructure.</p>
+      </div>
+      <button class="btn-primary" id="heroRefreshBtn">↻ Refresh</button>
+    </div>
+
+    <div class="metrics-grid">
+      <article class="metric-card accent-green">
+        <div class="metric-top"><span class="metric-label">Today's Revenue</span><span class="metric-icon">₹</span></div>
+        <div class="metric-value" id="m-sales">—</div>
+        <div class="metric-sub">Total settled sales</div>
+        <div class="metric-glow"></div>
+      </article>
+      <article class="metric-card accent-blue">
+        <div class="metric-top"><span class="metric-label">Paid Bills</span><span class="metric-icon">✓</span></div>
+        <div class="metric-value" id="m-bills">—</div>
+        <div class="metric-sub">Completed dining bills</div>
+        <div class="metric-glow"></div>
+      </article>
+      <article class="metric-card accent-yellow">
+        <div class="metric-top"><span class="metric-label">Total Orders</span><span class="metric-icon">↗</span></div>
+        <div class="metric-value" id="m-orders">—</div>
+        <div class="metric-sub">Orders processed today</div>
+        <div class="metric-glow"></div>
+      </article>
+      <article class="metric-card accent-red">
+        <div class="metric-top"><span class="metric-label">Active Staff</span><span class="metric-icon">👥</span></div>
+        <div class="metric-value" id="m-staff-count">—</div>
+        <div class="metric-sub">Registered team accounts</div>
+        <div class="metric-glow"></div>
+      </article>
+    </div>
+
+    <div class="two-col-grid">
+      <article class="panel">
+        <div class="panel-header"><div><h2>Kitchen &amp; Order Pipeline</h2><p>Live operational status</p></div><span class="panel-icon">♨</span></div>
+        <div class="kitchen-bars">
+          <div class="kbar pending"><div class="kbar-label"><span class="kdot"></span> Pending</div><strong id="k-pending">—</strong></div>
+          <div class="kbar preparing"><div class="kbar-label"><span class="kdot"></span> Preparing</div><strong id="k-preparing">—</strong></div>
+          <div class="kbar ready"><div class="kbar-label"><span class="kdot"></span> Ready</div><strong id="k-ready">—</strong></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header"><div><h2>Top Popular Items</h2><p>Best selling items today</p></div><span class="panel-icon">⭐</span></div>
+        <div id="popularList" class="popular-list"><div class="loading-row">Loading popular items…</div></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 2. MANAGE STAFF -->
+  <section class="page hidden" id="page-staff">
+    <div class="page-hero small">
+      <div>
+        <div class="eyebrow">WORKFORCE &amp; ACCESS</div>
+        <h1>Staff Directory <span class="sparkle">👥</span></h1>
+        <p class="hero-sub">Manage all cafe personnel, roles, permissions, and registration</p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-primary" id="openRegStaffModalBtn">+ Register New Staff</button>
+        <button class="btn-outline" id="refreshStaffBtn">↻ Refresh</button>
+      </div>
+    </div>
+
+    <article class="panel full-panel">
+      <div class="panel-header">
+        <div>
+          <h2>All Staff Members</h2>
+          <p>Activate, deactivate, or review cafe personnel</p>
+        </div>
+        <span class="panel-icon">📋</span>
+      </div>
+      <div id="staffTableContainer" class="staff-table-container">
+        <div class="loading-row">Loading staff members…</div>
+      </div>
+    </article>
+  </section>
+
+  <!-- 3. CONFIGURE MENU -->
+  <section class="page hidden" id="page-menu">
+    <div class="page-hero small">
+      <div>
+        <div class="eyebrow">MENU CONFIGURATION</div>
+        <h1>Menu Categories &amp; Items <span class="sparkle">☕</span></h1>
+        <p class="hero-sub">Configure categories, pricing, item details, and availability</p>
+      </div>
+      <div class="hero-actions">
+        <select id="menuCatFilter" class="ctrl-select"><option value="">All categories</option></select>
+        <button class="btn-primary" id="addItemBtn">+ Add Item</button>
+        <button class="btn-outline" id="addCatBtn">+ Category</button>
+      </div>
+    </div>
+    <div id="menuGrid" class="menu-grid"><div class="loading-row">Loading menu…</div></div>
+  </section>
+
+  <!-- 4. MANAGE TABLES -->
+  <section class="page hidden" id="page-tables">
+    <div class="page-hero small">
+      <div>
+        <div class="eyebrow">FLOOR ARCHITECTURE</div>
+        <h1>Cafe Tables <span class="sparkle">▤</span></h1>
+        <p class="hero-sub">Configure table numbers, seat capacities, and floor availability</p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-primary" id="addTableBtn">+ Add Table</button>
+        <button class="btn-outline" id="refreshTablesBtn">↻ Refresh</button>
+      </div>
+    </div>
+    <div id="tablesGrid" class="tables-grid"><div class="loading-row">Loading tables…</div></div>
+  </section>
+
+  <!-- 5. VIEW REPORTS -->
+  <section class="page hidden" id="page-reports">
+    <div class="page-hero small">
+      <div>
+        <div class="eyebrow">FINANCIAL AUDIT</div>
+        <h1>Financial &amp; Operational Reports <span class="sparkle">📊</span></h1>
+        <p class="hero-sub">Track revenue, order volumes, and financial history</p>
+      </div>
+      <div class="report-controls">
+        <label class="ctrl-label">Period</label>
+        <select id="reportDays" class="ctrl-select">
+          <option value="7">Last 7 days</option>
+          <option value="14">Last 14 days</option>
+          <option value="30">Last 30 days</option>
+        </select>
+        <button class="btn-primary" id="loadReportBtn">Load Report</button>
+      </div>
+    </div>
+    <div class="metrics-grid small">
+      <article class="metric-card accent-green">
+        <div class="metric-top"><span class="metric-label">Total Revenue</span><span class="metric-icon">₹</span></div>
+        <div class="metric-value" id="r-total">—</div>
+        <div class="metric-sub" id="r-period">for selected period</div>
+        <div class="metric-glow"></div>
+      </article>
+    </div>
+    <article class="panel full-panel">
+      <div class="panel-header"><div><h2>Daily Revenue Breakdown</h2><p>Revenue collected per day</p></div><span class="panel-icon">₹</span></div>
+      <div id="salesChart" class="sales-chart-container"><div class="loading-row">Select a period and click Load Report.</div></div>
+    </article>
+  </section>
+
+  <!-- 6. MANAGE SYSTEM -->
+  <section class="page hidden" id="page-system">
+    <div class="page-hero small">
+      <div>
+        <div class="eyebrow">INFRASTRUCTURE</div>
+        <h1>System Control &amp; Health <span class="sparkle">⚙</span></h1>
+        <p class="hero-sub">Server connectivity, security protocols, and database state</p>
+      </div>
+    </div>
+
+    <div class="two-col-grid">
+      <article class="panel">
+        <div class="panel-header"><div><h2>System Health Status</h2><p>Core backend services</p></div><span class="panel-icon">🛡</span></div>
+        <div class="system-status-list">
+          <div class="system-status-row">
+            <span>FastAPI REST Server</span>
+            <span class="badge-status online" id="sysApiStatus">● Online (Port 8000)</span>
+          </div>
+          <div class="system-status-row">
+            <span>SQLite Database Engine</span>
+            <span class="badge-status online" id="sysDbStatus">● Connected (mokko.db)</span>
+          </div>
+          <div class="system-status-row">
+            <span>Auth &amp; JWT Security</span>
+            <span class="badge-status online">● HS256 Active</span>
+          </div>
+          <div class="system-status-row">
+            <span>Role-Based Access Control</span>
+            <span class="badge-status online">● Enforced (Admin/Manager/Waiter)</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header"><div><h2>System Operations</h2><p>Administrative maintenance</p></div><span class="panel-icon">⚡</span></div>
+        <div class="system-actions">
+          <p style="font-size:12px; color:#78756c; margin-bottom:12px;">Quick administrative actions for the cafe workspace:</p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn-outline" id="sysCheckConnBtn">↻ Ping Backend API</button>
+            <button class="btn-outline" id="sysClearCacheBtn">🗑 Clear Local Session Cache</button>
+            <a href="register.html" class="btn-primary" style="text-decoration:none; display:inline-block;" target="_blank">↗ Open Register Page</a>
+          </div>
+          <div id="sysActionResult" class="bill-result hidden" style="margin-top: 14px;"></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer class="main-footer">
+    <span>© 2026 MOKKO Cafe Management System</span>
+    <span>Administrator System Control Portal ☕</span>
+  </footer>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal" id="modalBox" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>

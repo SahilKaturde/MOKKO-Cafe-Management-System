@@ -1,0 +1,77 @@
+/* ============================================================
+   MOKKO Registration Styles — register.css
+   ============================================================ */
+
+.register-layout .login-content {
+    max-width: 440px;
+}
+
+.field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+@media (max-width: 480px) {
+    .field-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.custom-select {
+    width: 100%;
+    padding: 12px 14px;
+    background: #ffffff;
+    border: 1px solid #ded8cb;
+    border-radius: 9px;
+    font-size: 13px;
+    color: #1c1917;
+    font-family: inherit;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2214%22%20height%3D%2214%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2378756c%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+}
+
+.custom-select:focus {
+    border-color: #c45d2c;
+    box-shadow: 0 0 0 3px rgba(196, 93, 44, 0.15);
+}
+
+.role-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: -6px 0 16px;
+    padding: 9px 12px;
+    background: #fbf7ee;
+    border: 1px solid #ebd9b8;
+    border-radius: 8px;
+    font-size: 11px;
+    color: #7b5825;
+    line-height: 1.45;
+}
+
+.role-hint-icon {
+    font-weight: 700;
+    color: #c45d2c;
+}
+
+.auth-context-banner {
+    margin-bottom: 18px;
+    padding: 10px 14px;
+    background: #edf9f2;
+    border: 1px solid #bfe3d0;
+    border-radius: 9px;
+    font-size: 11px;
+    color: #1e5a42;
+    line-height: 1.5;
+}
+
+.auth-context-banner strong {
+    color: #164634;
+}

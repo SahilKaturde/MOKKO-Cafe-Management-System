@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8f6f1">
+    <title>Sign in — MOKKO</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <main class="login-layout">
+        <section class="login-panel">
+            <a href="login.html" class="brand">
+                <span class="brand-icon">M</span>
+                <span>
+                    <strong>MOKKO</strong>
+                    <small>Cafe management</small>
+                </span>
+            </a>
+
+            <div class="login-content">
+                <div class="eyebrow">WELCOME BACK</div>
+                <h1>Your cafe.<br>Your workspace<span>.</span></h1>
+                <p class="intro">
+                    Sign in to manage your cafe operations, orders,
+                    tables, and daily sales.
+                </p>
+
+                <form id="loginForm">
+                    <div class="field">
+                        <label for="email">Email address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="you@example.com"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <div class="password-label">
+                            <label for="password">Password</label>
+                            <button
+                                type="button"
+                                id="togglePassword"
+                                class="text-button"
+                            >Show</button>
+                        </div>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+
+                    <div id="loginMessage" class="message hidden" role="alert"></div>
+
+                    <button type="submit" id="loginButton" class="submit-button">
+                        <span id="buttonText">Sign in to MOKKO</span>
+                        <span aria-hidden="true">→</span>
+                    </button>
+                </form>
+
+                <div class="security-note">
+                    <span>●</span>
+                    Secure staff access
+                </div>
+
+                <div class="register-link-box">
+                    <span>New to the cafe team?</span>
+                    <a href="register.html" class="register-link">Register staff account →</a>
+                </div>
+            </div>
+
+            <footer class="login-footer">
+                © 2026 MOKKO Cafe Management
+            </footer>
+        </section>
+
+        <aside class="visual-panel">
+            <div class="visual-top">
+                <span class="visual-tag">MADE FOR CAFE LIFE</span>
+                <span class="sparkle">✳</span>
+            </div>
+
+            <div class="coffee-illustration" aria-label="Coffee cup illustration">
+                <div class="sun"></div>
+                <div class="steam steam-one"></div>
+                <div class="steam steam-two"></div>
+                <div class="cup">
+                    <div class="coffee"></div>
+                    <div class="latte-art">♥</div>
+                </div>
+                <div class="cup-handle"></div>
+                <div class="saucer"></div>
+                <div class="coffee-bean bean-one"></div>
+                <div class="coffee-bean bean-two"></div>
+                <div class="coffee-bean bean-three"></div>
+                <div class="table-shadow"></div>
+            </div>
+
+            <div class="visual-copy">
+                <div class="visual-quote">GOOD COFFEE.<br>SMOOTH OPERATIONS.</div>
+                <p>One place for your people, your menu, and every cup you serve.</p>
+            </div>
+
+            <div class="visual-bottom">
+                <span>01 / 01</span>
+                <span>BREWED FOR BETTER DAYS</span>
+            </div>
+        </aside>
+    </main>
+
+    <script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MOKKO Staff Dashboard — Manage tables, orders and kitchen queue.">
+  <title>Staff Dashboard — MOKKO</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body data-role="staff">
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a href="#" class="brand">
+      <span class="brand-icon">M</span>
+      <span class="brand-text"><strong>MOKKO</strong><small>Staff Portal</small></span>
+    </a>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="staff-profile">
+    <div class="staff-avatar" id="sidebarAvatar">S</div>
+    <div class="staff-info">
+      <span class="staff-name" id="sidebarName">Staff</span>
+      <span class="staff-role-badge waiter">Waiter</span>
+    </div>
+  </div>
+
+  <p class="nav-label">WORKSPACE</p>
+  <nav class="navigation">
+    <button class="nav-item active" data-page="dashboard"><span class="nav-icon">▦</span><span class="nav-text">Dashboard</span></button>
+    <button class="nav-item" data-page="tables"><span class="nav-icon">▤</span><span class="nav-text">Tables</span></button>
+    <button class="nav-item" data-page="orders"><span class="nav-icon">≡</span><span class="nav-text">My Orders</span></button>
+    <button class="nav-item" data-page="kitchen"><span class="nav-icon">♨</span><span class="nav-text">Kitchen</span></button>
+    <button class="nav-item" data-page="menu"><span class="nav-icon">☕</span><span class="nav-text">Menu</span></button>
+    <button class="nav-item" data-page="profile"><span class="nav-icon">👤</span><span class="nav-text">My Profile</span></button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="connection-status">
+      <span class="status-dot" id="connDot"></span>
+      <span class="status-text" id="connText">Connecting…</span>
+    </div>
+    <button class="logout-btn" id="logoutBtn">Sign out ↗</button>
+  </div>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <div class="breadcrumb"><span id="breadcrumbRole">Staff</span> <span class="sep">/</span> <span id="breadcrumbPage">Dashboard</span></div>
+    <div class="topbar-right">
+      <span class="date-chip" id="todayDate"></span>
+      <button class="icon-btn" id="refreshBtn" title="Refresh">↻</button>
+      <div class="topbar-avatar" id="topbarAvatar">S</div>
+    </div>
+  </header>
+
+  <div class="notice hidden" id="notice" role="alert"></div>
+
+  <!-- DASHBOARD -->
+  <section class="page active" id="page-dashboard">
+    <div class="page-hero">
+      <div>
+        <div class="eyebrow">YOUR SHIFT SUMMARY</div>
+        <h1>Ready to serve, <span id="greetName">Staff</span> <span class="sparkle">☕</span></h1>
+        <p class="hero-sub">Here's your live order queue.</p>
+      </div>
+      <button class="btn-primary" id="heroRefreshBtn">↻ Refresh</button>
+    </div>
+    <div class="metrics-grid">
+      <article class="metric-card accent-yellow">
+        <div class="metric-top"><span class="metric-label">Pending Orders</span><span class="metric-icon">◷</span></div>
+        <div class="metric-value" id="s-pending">—</div>
+        <div class="metric-sub">Awaiting kitchen</div>
+        <div class="metric-glow"></div>
+      </article>
+      <article class="metric-card accent-blue">
+        <div class="metric-top"><span class="metric-label">Preparing</span><span class="metric-icon">♨</span></div>
+        <div class="metric-value" id="s-preparing">—</div>
+        <div class="metric-sub">In the kitchen now</div>
+        <div class="metric-glow"></div>
+      </article>
+      <article class="metric-card accent-green">
+        <div class="metric-top"><span class="metric-label">Ready to Serve</span><span class="metric-icon">🔔</span></div>
+        <div class="metric-value" id="s-ready">—</div>
+        <div class="metric-sub">Pickup from counter</div>
+        <div class="metric-glow"></div>
+      </article>
+      <article class="metric-card accent-yellow">
+        <div class="metric-top"><span class="metric-label">Served Today</span><span class="metric-icon">✓</span></div>
+        <div class="metric-value" id="s-served">—</div>
+        <div class="metric-sub">Completed orders</div>
+        <div class="metric-glow"></div>
+      </article>
+    </div>
+    <div class="two-col-grid">
+      <article class="panel">
+        <div class="panel-header"><div><h2>Quick Actions</h2><p>Most common tasks</p></div><span class="panel-icon">⚡</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button class="btn-primary" onclick="document.querySelector('[data-page=tables]').click()">▤ View Tables</button>
+          <button class="btn-outline" onclick="document.querySelector('[data-page=orders]').click()">≡ View My Orders</button>
+          <button class="btn-outline" onclick="document.querySelector('[data-page=kitchen]').click()">♨ Kitchen Queue</button>
+        </div>
+      </article>
+      <article class="panel">
+        <div class="panel-header"><div><h2>Menu Preview</h2><p>Browse available items</p></div><span class="panel-icon">☕</span></div>
+        <p style="font-size:14px;color:var(--text-secondary);">Use the Menu tab to browse all available items and categories.</p>
+        <button class="btn-outline" style="margin-top:14px" onclick="document.querySelector('[data-page=menu]').click()">Browse Menu →</button>
+      </article>
+    </div>
+  </section>
+
+  <!-- TABLES -->
+  <section class="page hidden" id="page-tables">
+    <div class="page-hero small">
+      <div>
+        <div class="eyebrow">FLOOR VIEW</div>
+        <h1>Tables <span class="sparkle">▤</span></h1>
+        <p class="hero-sub">Click an available table to seat customers</p>
+      </div>
+      <button class="btn-outline" id="refreshTablesBtn">↻ Refresh</button>
+    </div>
+    <div id="tablesGrid" class="tables-grid"><div class="loading-row">Loading tables…</div></div>
+  </section>
+
+  <!-- ORDERS -->
+  <section class="page hidden" id="page-orders">
+    <div class="page-hero small">
+      <div>
+        <div class="eyebrow">ORDER QUEUE</div>
+        <h1>My Orders <span class="sparkle">≡</span></h1>
+        <p class="hero-sub">Your assigned orders and their status</p>
+      </div>
+      <div class="hero-actions">
+        <select id="orderStatusFilter" class="ctrl-select">
+          <option value="">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="preparing">Preparing</option>
+          <option value="ready">Ready</option>
+          <option value="served">Served</option>
+        </select>
+        <button class="btn-primary" id="filterOrdersBtn">Filter</button>
+      </div>
+    </div>
+    <div id="ordersContainer" class="orders-container"><div class="loading-row">Loading orders…</div></div>
+  </section>
+
+  <!-- KITCHEN -->
+  <section class="page hidden" id="page-kitchen">
+    <div class="page-hero small">
+      <div>
+        <div class="eyebrow">KITCHEN QUEUE</div>
+        <h1>Kitchen <span class="sparkle">♨</span></h1>
+        <p class="hero-sub">Active orders awaiting or in preparation</p>
+      </div>
+      <button class="btn-outline" id="refreshKitchenBtn">↻ Refresh</button>
+    </div>
+    <div id="kitchenContainer" class="orders-container"><div class="loading-row">Loading kitchen queue…</div></div>
+  </section>
+
+  <!-- MENU (read-only for staff) -->
+  <section class="page hidden" id="page-menu">
+    <div class="page-hero small">
+      <div>
+        <div class="eyebrow">MENU REFERENCE</div>
+        <h1>Menu <span class="sparkle">☕</span></h1>
+        <p class="hero-sub">Browse all available items</p>
+      </div>
+      <div class="hero-actions">
+        <select id="menuCatFilter" class="ctrl-select"><option value="">All categories</option></select>
+      </div>
+    </div>
+    <div id="menuGrid" class="menu-grid"><div class="loading-row">Loading menu…</div></div>
+  </section>
+
+  <!-- PROFILE -->
+  <section class="page hidden" id="page-profile">
+    <div class="page-hero small">
+      <div>
+        <div class="eyebrow">ACCOUNT</div>
+        <h1>My Profile <span class="sparkle">👤</span></h1>
+        <p class="hero-sub">Your staff account details</p>
+      </div>
+    </div>
+    <div class="billing-grid">
+      <article class="panel">
+        <div class="panel-header"><div><h2>Account Details</h2><p>Your MOKKO staff account</p></div><span class="panel-icon">👤</span></div>
+        <div id="myProfile" class="profile-card"><div class="loading-row">Loading…</div></div>
+      </article>
+      <article class="panel">
+        <div class="panel-header"><div><h2>Shift Tips</h2><p>Quick reference</p></div><span class="panel-icon">💡</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--text-secondary);">
+          <div class="kbar pending" style="padding:10px 14px"><div class="kbar-label"><span class="kdot"></span> Pending</div><span>New order placed</span></div>
+          <div class="kbar preparing" style="padding:10px 14px"><div class="kbar-label"><span class="kdot"></span> Preparing</div><span>Kitchen is cooking</span></div>
+          <div class="kbar ready" style="padding:10px 14px"><div class="kbar-label"><span class="kdot"></span> Ready</div><span>Pick up &amp; serve</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer class="main-footer">
+    <span>© 2026 MOKKO Cafe Management System</span>
+    <span>Staff Portal ♥</span>
+  </footer>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal" id="modalBox" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script src="dashboard.js"></script>
+<script>
+  // Staff profile page trigger
+  document.querySelector('[data-page="profile"]')?.addEventListener('click', () => {
+    setTimeout(loadMyProfile, 100);
+  });
+</script>
+</body>
+</html>

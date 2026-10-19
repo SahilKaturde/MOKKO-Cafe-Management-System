@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8f6f1">
+    <meta name="description" content="Register for MOKKO Cafe Management — Staff, Manager and Admin onboarding.">
+    <title>Staff Registration — MOKKO</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="register.css">
+</head>
+<body>
+    <main class="login-layout register-layout">
+        <section class="login-panel">
+            <a href="login.html" class="brand">
+                <span class="brand-icon">M</span>
+                <span>
+                    <strong>MOKKO</strong>
+                    <small>Staff Onboarding</small>
+                </span>
+            </a>
+
+            <div class="login-content">
+                <div class="eyebrow">STAFF ONBOARDING</div>
+                <h1>Join the crew.<br>Brew great days<span>.</span></h1>
+                <p class="intro">
+                    Create a staff account to access tables, take orders, prepare items, or oversee daily cafe operations.
+                </p>
+
+                <div id="authContextBanner" class="auth-context-banner hidden"></div>
+
+                <form id="registerForm">
+                    <div class="field">
+                        <label for="regFullName">Full name</label>
+                        <input
+                            type="text"
+                            id="regFullName"
+                            name="full_name"
+                            placeholder="e.g. Alex Morgan"
+                            autocomplete="name"
+                            minlength="2"
+                            maxlength="100"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="regEmail">Email address</label>
+                        <input
+                            type="email"
+                            id="regEmail"
+                            name="email"
+                            placeholder="alex@mokkocafe.com"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="regRole">Role</label>
+                            <select id="regRole" name="role" required class="custom-select">
+                                <option value="waiter" selected>Waiter (Customer Service)</option>
+                                <option value="chef">Chef (Kitchen Prep)</option>
+                                <option value="cashier">Cashier (Billing &amp; Payments)</option>
+                                <option value="manager">Manager (Cafe Operations)</option>
+                                <option value="admin">Admin (Full System Control)</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="regPhone">Phone number <small>(optional)</small></label>
+                            <input
+                                type="tel"
+                                id="regPhone"
+                                name="phone"
+                                placeholder="+91 98765 43210"
+                                autocomplete="tel"
+                                maxlength="20"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="role-hint" id="roleHint">
+                        <span class="role-hint-icon">ℹ</span>
+                        <span id="roleHintText">Waiters can seat guests, create orders, and request bills.</span>
+                    </div>
+
+                    <div class="field">
+                        <div class="password-label">
+                            <label for="regPassword">Password (min 8 chars)</label>
+                            <button
+                                type="button"
+                                id="toggleRegPassword"
+                                class="text-button"
+                            >Show</button>
+                        </div>
+                        <input
+                            type="password"
+                            id="regPassword"
+                            name="password"
+                            placeholder="Minimum 8 characters"
+                            autocomplete="new-password"
+                            minlength="8"
+                            maxlength="128"
+                            required
+                        >
+                    </div>
+
+                    <div id="registerMessage" class="message hidden" role="alert"></div>
+
+                    <button type="submit" id="registerButton" class="submit-button">
+                        <span id="regButtonText">Create Staff Account</span>
+                        <span aria-hidden="true">→</span>
+                    </button>
+                </form>
+
+                <div class="register-link-box">
+                    <span>Already have an account?</span>
+                    <a href="login.html" class="register-link">Sign in to MOKKO →</a>
+                </div>
+            </div>
+
+            <footer class="login-footer">
+                © 2026 MOKKO Cafe Management • Role-based access control
+            </footer>
+        </section>
+
+        <aside class="visual-panel">
+            <div class="visual-top">
+                <span class="visual-tag">MOKKO WORKFORCE</span>
+                <span class="sparkle">✳</span>
+            </div>
+
+            <div class="coffee-illustration" aria-label="Coffee cup illustration">
+                <div class="sun"></div>
+                <div class="steam steam-one"></div>
+                <div class="steam steam-two"></div>
+                <div class="cup">
+                    <div class="coffee"></div>
+                    <div class="latte-art">♥</div>
+                </div>
+                <div class="cup-handle"></div>
+                <div class="saucer"></div>
+                <div class="coffee-bean bean-one"></div>
+                <div class="coffee-bean bean-two"></div>
+                <div class="coffee-bean bean-three"></div>
+                <div class="table-shadow"></div>
+            </div>
+
+            <div class="visual-copy">
+                <div class="visual-quote">EVERY CUP.<br>EVERY ROLE.</div>
+                <p>From table service and espresso crafting to inventory and daily sales reports, everyone works together seamlessly.</p>
+            </div>
+
+            <div class="visual-bottom">
+                <span>ROLE ARCHITECTURE</span>
+                <span>ADMIN • MANAGER • WAITER</span>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000';
+
+        const roleDescriptions = {
+            waiter: "Waiters view tables, seat guests, take orders, and request billing.",
+            chef: "Chefs manage the kitchen queue and update order preparation statuses.",
+            cashier: "Cashiers generate bills, apply taxes, and record cash/card/UPI payments.",
+            manager: "Managers oversee cafe operations, menu items, table status, and daily reports.",
+            admin: "Admins have full system authority: managing staff, menu structure, and system settings."
+        };
+
+        const regRole = document.getElementById('regRole');
+        const roleHintText = document.getElementById('roleHintText');
+        const togglePassword = document.getElementById('toggleRegPassword');
+        const regPassword = document.getElementById('regPassword');
+        const form = document.getElementById('registerForm');
+        const registerButton = document.getElementById('registerButton');
+        const regButtonText = document.getElementById('regButtonText');
+        const message = document.getElementById('registerMessage');
+        const authBanner = document.getElementById('authContextBanner');
+
+        // Check if already logged in as Admin or Manager
+        const activeToken = localStorage.getItem('mokko_token');
+        const activeStaff = JSON.parse(localStorage.getItem('mokko_staff') || 'null');
+
+        if (activeToken && activeStaff && (activeStaff.role === 'admin' || activeStaff.role === 'manager')) {
+            authBanner.innerHTML = `<strong>Authorized Session:</strong> Logged in as <em>${activeStaff.full_name} (${activeStaff.role.toUpperCase()})</em>. Staff registered here will be verified immediately.`;
+            authBanner.classList.remove('hidden');
+        }
+
+        regRole.addEventListener('change', () => {
+            const role = regRole.value;
+            roleHintText.textContent = roleDescriptions[role] || '';
+        });
+
+        togglePassword.addEventListener('click', () => {
+            const showing = regPassword.type === 'text';
+            regPassword.type = showing ? 'password' : 'text';
+            togglePassword.textContent = showing ? 'Show' : 'Hide';
+        });
+
+        function showMessage(text, type = 'error') {
+            message.textContent = text;
+            message.classList.remove('hidden', 'success');
+            if (type === 'success') message.classList.add('success');
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const full_name = document.getElementById('regFullName').value.trim();
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
+            const password = regPassword.value;
+            const phone = document.getElementById('regPhone').value.trim() || null;
+            const role = regRole.value;
+
+            message.classList.add('hidden');
+            registerButton.disabled = true;
+            regButtonText.textContent = 'Creating account…';
+
+            const headers = { 'Content-Type': 'application/json' };
+            if (activeToken) {
+                headers['Authorization'] = `Bearer ${activeToken}`;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({ full_name, email, password, phone, role }),
+                });
+
+                const data = await res.json().catch(() => ({}));
+
+                if (!res.ok) {
+                    throw new Error(data.detail || `Registration failed (${res.status})`);
+                }
+
+                showMessage(`✓ Account created successfully for ${data.full_name} (${data.role})! Redirecting to sign in…`, 'success');
+                regButtonText.textContent = 'Account Created ✓';
+                form.reset();
+
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+
+            } catch (err) {
+                showMessage(err.message || 'Could not complete registration.');
+                registerButton.disabled = false;
+                regButtonText.textContent = 'Create Staff Account';
+            }
+        });
+    </script>
+</body>
+</html>
